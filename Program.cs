@@ -2,21 +2,11 @@
 
 class Cipher
 {
-    /*public string GenerujSzyfr(string tekst, int klucz)
-    {
-        List<char> listaZnakow = new();
-        for (int i = 0; i < tekst.Length; i++)
-        {
-            listaZnakow.Add(tekst[i]);
-        }
-        Console.WriteLine();
-    }*/
-    
     // private int cipherKey;
     // private string cipherText;
-    public string encryptedText;
     
-    string[] letters =
+    public string encryptedText;
+    public string[] letters =
     [
         "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     ];
@@ -27,21 +17,40 @@ class Cipher
         
         foreach (var item in text)
         {
-            charsList.Add(text[item].ToString());
+            charsList.Add(item.ToString());
         }
-        // charsList = ["a", "b", "c"]
 
-        foreach (var letter in charsList)
+        List<int> letterIndexes = new();
+        for (int i = 0; i < charsList.Count; i++)
         {
-            var letterIndex = charsList.IndexOf(letter);
-            charsList.Insert(letterIndex + key, letter);
+            letterIndexes.Add(letters.IndexOf(charsList[i]));
         }
         
-        // turn back into a string
-        foreach (var item in charsList)
+        List<string> cipheredList = new();
+        for(int i = 0; i < charsList.Count; i++)
         {
-            // encryptedText += charsList[item];
+            var letterToAdd = "";
+            var currentLetterIndex = letterIndexes[i];
+            Console.WriteLine(currentLetterIndex);
+            
+            if (Array.FindIndex(letters, letter => letter == charsList[i]) + 1 + key > letters.Length)
+            {
+                int newIndex = (Array.FindIndex(letters, letter => letter == charsList[i]) + key - letters.Length);
+                letterToAdd = letters[newIndex];
+            }
+            else
+            {
+                letterToAdd = letters[currentLetterIndex + key];
+            }
+            cipheredList.Add(letterToAdd);
         }
+        
+        for (int i = 0; i < cipheredList.Count; i++)
+        {
+            encryptedText += cipheredList[i];
+        }
+
+        return encryptedText;
     }
 }
 
@@ -49,10 +58,9 @@ class Program
 {
     public static void Main(string[] args)
     {
-        Console.Write("main\n");
-
         Cipher cipher = new Cipher();
 
-        cipher.GenerateCipher("abc", 3);
+        cipher.GenerateCipher("thequickbrownfoxjumpsoverthelazydog", 3); // TODO: if letter index equals -1, treat it as a space
+        Console.WriteLine("\n"+cipher.encryptedText);
     }
 }
