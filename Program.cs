@@ -31,11 +31,10 @@ class Cipher
         {
             var letterToAdd = "";
             var currentLetterIndex = letterIndexes[i];
-            Console.WriteLine(currentLetterIndex);
             
             if (Array.FindIndex(letters, letter => letter == charsList[i]) + 1 + key > letters.Length)
             {
-                int newIndex = (Array.FindIndex(letters, letter => letter == charsList[i]) + key - letters.Length);
+                int newIndex = Array.FindIndex(letters, letter => letter == charsList[i]) + key % letters.Length;
                 letterToAdd = letters[newIndex];
             }
             else
@@ -43,6 +42,7 @@ class Cipher
                 letterToAdd = letters[currentLetterIndex + key];
             }
             cipheredList.Add(letterToAdd);
+            // cipheredList.RemoveAt(0);
         }
         
         for (int i = 0; i < cipheredList.Count; i++)
@@ -59,8 +59,9 @@ class Program
     public static void Main(string[] args)
     {
         Cipher cipher = new Cipher();
-
-        cipher.GenerateCipher("thequickbrownfoxjumpsoverthelazydog", 3); // TODO: if letter index equals -1, treat it as a space
-        Console.WriteLine("\n"+cipher.encryptedText);
+        cipher.GenerateCipher("aaaaa", 20);
+        Console.WriteLine(cipher.encryptedText);
+        
+        // TODO: if letter index equals -1, treat it as a space
     }
 }
